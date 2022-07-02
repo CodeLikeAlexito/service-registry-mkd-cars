@@ -1,0 +1,39 @@
+kind: Service # Kubernetes resource kind we are creating
+apiVersion: v1 # Kubernetes API version
+metadata: # Metadata of the resource kind we are creating
+  name: service-registry
+  labels:
+    name: service-registry
+spec:
+  ports:
+    - protocol: TCP
+      port: 8761 # The port that the service is running on in the cluster
+      targetPort: 8761 # The port exposed by the service
+      nodePort: 31002
+  selector:
+    app: service-registry
+  type: NodePort # type of the service.
+
+---
+
+apiVersion: apps/v1
+kind: Deployment # Kubernetes resource kind we are creating
+metadata:
+  name: service-registry
+spec:
+  selector:
+    matchLabels:
+      app: service-registry
+  replicas: 2 # Number of replicas that will be created for this deployment
+  template:
+    metadata:
+      labels:
+        app: service-registry
+    spec:
+      containers:
+        - name: service-registry
+          image: service-registry:v1
+          # Image that will be used to containers in the cluster
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8761
