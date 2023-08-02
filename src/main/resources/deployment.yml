@@ -32,7 +32,7 @@ spec:
     spec:
       containers:
         - name: service-registry
-          image: service-registry:v1
+          image: service-registry:v3
           # Image that will be used to containers in the cluster
           imagePullPolicy: IfNotPresent
           ports:
